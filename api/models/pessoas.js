@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
     role: DataTypes.STRING
   }, {
     sequelize,
+    paranoid: true,
+    defaultScope: {
+      where: {ativo: true} 
+    },
     modelName: 'Pessoas',
   });
   return Pessoas;
