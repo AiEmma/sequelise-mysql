@@ -1,0 +1,4 @@
+Aplicação para escola de inglês usando node e sequelize 
+
+npm i para instalar
+npm run start para rodar aplicação
