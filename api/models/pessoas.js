@@ -15,14 +15,33 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey:'docente_id'
       })
       Pessoas.hasMany(models.Matriculas, {
-        foreignKey:'estudante_id'
+        foreignKey:'estudante_id',
+        scope: {
+          status:'confirmado'
+        },
+        as: 'aulasMatriculadas'
       })
     }
   }
   Pessoas.init({
-    nome: DataTypes.STRING,
+    nome: {
+      type: DataTypes.STRING,
+      validate: {
+        funcaoValidadora: function(dado) {
+          if(dado.length <3) 
+          throw new Error('Nome deve ter mais de 3 caracteres')
+        }
+      }
+    },
     ativo: DataTypes.BOOLEAN,
-    email: DataTypes.STRING,
+    email: {
+      type:DataTypes.STRING, 
+      validate: {
+        isEmail: {
+          args: true,
+          msg: 'dado do tipo email inválido'
+        }}
+    },
     role: DataTypes.STRING
   }, {
     sequelize,
@@ -30,6 +49,8 @@ module.exports = (sequelize, DataTypes) => {
     defaultScope: {
       where: {ativo: true} 
     },
+    scopes:{
+      ativo: {where: {}}},
     modelName: 'Pessoas',
   });
   return Pessoas;
